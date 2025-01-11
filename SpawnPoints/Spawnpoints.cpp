@@ -49,15 +49,16 @@ FVector RandomVector_FromExisting()
     return ExistingSpawnpoints[random];
 }
 
-void RandomizingVector(FVector* vector)
+FVector RandomizingVector(FVector vector)
 {
-    vector->X = random(vector->X - min_max_point, vector->X + min_max_point);
-    vector->Y = random(vector->Y - min_max_point, vector->Y + min_max_point);
+    vector.X = random(vector.X - min_max_point, vector.X + min_max_point);
+    vector.Y = random(vector.Y - min_max_point, vector.Y + min_max_point);
+    return vector;
 }
 
 FVector GetRandomPoint()
 {
     FVector return_vector = RandomVector_FromExisting();
-    RandomizingVector(&return_vector);
+    return_vector = RandomizingVector(return_vector);
     return return_vector;
 }
