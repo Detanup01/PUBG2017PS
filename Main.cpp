@@ -49,22 +49,22 @@ void DisableCullingForAllActors(UWorld* World) // Function half made by ChatGPT 
             CUSTOMLOG("We are iterating the level: " + LevelName);
 
             // Skip persistent level and ignored levels
-            if (LevelName.contains("327")) {
+            if (LevelName.find("327") != std::string::npos) {
                 CUSTOMLOG("Skipping level: " + LevelName);
                 continue;
             }
 
-            if (LevelName.contains("328")) {
+            if (LevelName.find("328") != std::string::npos) {
                 CUSTOMLOG("Skipping level: " + LevelName);
                 continue;
             }
 
-            if (LevelName.contains("329")) {
+            if (LevelName.find("329") != std::string::npos) {
                 CUSTOMLOG("Skipping level: " + LevelName);
                 continue;
             }
 
-            if (LevelName.contains("32")) {
+            if (LevelName.find("32") != std::string::npos) {
                 CUSTOMLOG("Skipping level: " + LevelName);
                 continue;
             }
@@ -150,12 +150,12 @@ void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
         {
             for (size_t i = 0; i < DontPrintFunctionContains.size(); i++)
             {
-                isPresent = FuncName.contains(DontPrintFunctionContains[i]);
+                isPresent = FuncName.find(DontPrintFunctionContains[i]) != std::string::npos;
                 if (isPresent)
                     break;
             }
         }
-        if (!isPresent && Obj->IsA(AInfo::StaticClass()) && !(FuncName.contains("BndEvt")))
+        if (!isPresent && Obj->IsA(AInfo::StaticClass()) && !(FuncName.find("BndEvt") != std::string::npos))
         {
             CUSTOMLOG(ObjName + " CALLED " + FuncName);
         }
@@ -215,13 +215,16 @@ DWORD MainThread(HMODULE Module) {
     SDK::UEngine* Engine = SDK::UEngine::GetEngine();
     SDK::UWorld* World = SDK::UWorld::GetWorld();
 
+    auto MyGamemode = UGameplayStatics::GetGameMode(World);
+    bool IsTsLGamemode = MyGamemode->IsA(ATslGameMode::StaticClass());
+
     /* Getting the PlayerController, World, OwningGameInstance, ... should all be
      * checked not to be nullptr! */
     SDK::APlayerController* MyController =
         UGameplayStatics::GetPlayerController(World, 0);
 
-    if (MyController->HasAuthority()) {
-        SetCurrentNetworkStatus("SERVER_AUTHORITY");
+    if (IsTsLGamemode) {
+        SetCurrentNetworkStatus("SERVER");
     }
     else {
         SetCurrentNetworkStatus("CLIENT");
@@ -287,6 +290,52 @@ DWORD MainThread(HMODULE Module) {
             {
                 GameState->RemainingTime = GetWaitTime();
             }
+            /*
+            ATslGameMode* GameMode = static_cast<ATslGameMode*>(MyGamemode);
+
+            CUSTOMLOG("MatchPreparer name: " + std::to_string((int)(GameMode->MatchStartType)));
+            CUSTOMLOG("MatchPreparer name: " + GameMode->MatchPreparer->GetFullName());
+
+            GameMode->MatchStartType = EMatchStartType::Airborne;
+            auto airborneClass = GameMode->MatchPreparerClasses[1].Class;
+            CUSTOMLOG("airborneClass name: " + airborneClass->GetFullName());
+            CUSTOMLOG("classname: " + airborneClass->Class->Name.ToString());
+            CUSTOMLOG("UBlueprintGeneratedClass : " + UBlueprintGeneratedClass::StaticClass()->GetName());
+
+            if (airborneClass->IsA(UBlueprintGeneratedClass::StaticClass()))
+            {
+                CUSTOMLOG("IsA");
+                UObject* obj = airborneClass.Get();
+                CUSTOMLOG("UClass");
+                UBlueprintGeneratedClass* blueprint = static_cast<UBlueprintGeneratedClass*>(obj);
+                CUSTOMLOG("UBlueprintGeneratedClass");
+                UAirborneMatchPreparer* matchborn2 = static_cast<UAirborneMatchPreparer*>(blueprint->DefaultObject);
+                CUSTOMLOG("AircraftAltitude name: " + std::to_string(matchborn2->AircraftAltitude));
+                CUSTOMLOG("EndThetaDegree name: " + std::to_string(matchborn2->EndThetaDegree));
+                GameMode->MatchPreparer = matchborn2;
+                /* This here get the default for our match stuff
+                auto AirborneMatchPreparer2 = UObject::FindObject("AirborneMatchPreparer_Default_C AirborneMatchPreparer_Default.Default__AirborneMatchPreparer_Default_C");
+                CUSTOMLOG("AirborneMatchPreparer2: " + AirborneMatchPreparer2->GetFullName());
+                */
+            /*
+            }
+        */
+
+            
+            //GameMode->MatchPreparer = test;
+
+            /*
+            CUSTOMLOG("MatchPreparer name: " + std::to_string((int)(GameMode->MatchStartType)));
+            CUSTOMLOG("MatchPreparer name: " + GameMode->MatchPreparer->GetFullName());
+            GameMode->bStartPlayerAtMatchStart = true;
+            GameMode->bShouldSpawnAtStartSpot = true;
+            GameMode->bDelayedStart = true;*/
+            /*
+            UAirborneMatchPreparer airborne = {
+                .AircraftAltitude = 150000.0f,
+            };
+            GameMode->MatchPreparer = &airborne;
+            */
         }
 
     }
