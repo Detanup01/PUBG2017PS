@@ -75,9 +75,14 @@ void RandomizePlayerPositionAfterMatchStart(void* Func_Params)
     NewTransform.Rotation = Rotation;
     NewTransform.Scale3D = FVector(1.0, 1.0, 1.0);
 
+    ATslCharacter* newPlayer = static_cast<ATslCharacter*>(NewPawn);
+
+    // fix this.
     struct FHitResult HitResultTeleport;
-    NewPawn->bCanBeDamaged = false;
+    CUSTOMLOG("New player joined, making it Invulnerable.");
+    newPlayer->AdminInvulnerable();
     NewPawn->K2_SetActorTransform(NewTransform, false, &HitResultTeleport, true);
-    Sleep(100); // todo make this better
-    NewPawn->bCanBeDamaged = true;
+    Sleep(10000); // todo make this better
+    newPlayer->AdminInvulnerable();
+    CUSTOMLOG("Player should have spawned and fallen, reverting Invulnerable.");
 }

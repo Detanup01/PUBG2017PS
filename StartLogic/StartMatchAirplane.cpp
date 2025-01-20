@@ -99,16 +99,36 @@ void StartAirplane()
     // Store the global reference to the aircraft
     GLOB_AircraftVehicle = _ARC;
 
+    // Kill server cus player stuck in plane forever.
+    ATslCharacter* server_character = static_cast<ATslCharacter*>(UGameplayStatics::GetPlayerCharacter(World, 0));
+    ATslPlayerController* Controller = server_character->GetTslPlayerController();
+    Controller->Suicide();
+    Controller->ServerSuicide();
+    CUSTOMLOG("Killed server");
+
     // Get all pawns and assign them to the aircraft
     TArray<APawn*> AllPawns;
     TslGameMode->GetAllPawns(&AllPawns);
     int i = 0;
     for (APawn* Pawn : AllPawns)
     {
-        ATslCharacter* TslPawn = static_cast<ATslCharacter*>(Pawn);
-        if (!TslPawn || !Pawn->Controller)
+
+        if (!Pawn)
         {
-            CUSTOMLOG("Pawn or Controller is invalid.");
+            CUSTOMLOG("Pawn not exists.");
+            continue;
+        }
+
+        ATslCharacter* TslPawn = static_cast<ATslCharacter*>(Pawn);
+        if (!Pawn->Controller)
+        {
+            CUSTOMLOG("Controller is invalid.");
+            continue;
+        }
+
+        if (!TslPawn->IsAlive())
+        {
+            CUSTOMLOG("Pawn not alive.");
             continue;
         }
 
@@ -117,15 +137,13 @@ void StartAirplane()
 
         if (_ARC->VehicleSeatComponent->GetSeats().IsValidIndex(i))
         {
-            UVehicleSeatInteractionComponent* PlayerSeat =
-                _ARC->VehicleSeatComponent->GetSeats()[NetIndex];
+            UVehicleSeatInteractionComponent* PlayerSeat = _ARC->VehicleSeatComponent->GetSeats()[i];
 
             // Important function calls (Get players in the plane and move it to the end of the map)
             if (PlayerSeat)
             {
                 FVector TargetLocation = FVector(600000.0, 999999.0, AircraftAltitude);
-                FVector SpawnLocation = FVector(0.0, 0.0, AircraftAltitude);
-                CUSTOMLOG(_ARC->InteractionComponent->GetFullName());
+                FVector SpawnLocation = FVector(0, 0, AircraftAltitude);
 
                 _ARC->VehicleSeatComponent->Ride(TslPawn, PlayerSeat);
                 try
@@ -147,6 +165,7 @@ void StartAirplane()
                 PlayerSeat->Activate(true);
                 _ARC->InteractionComponent->Activate(true);
                 // _ARC->EjectAll();
+                CUSTOMLOG("Player seated! NetIndex: " + std::to_string(NetIndex) + " i: " + std::to_string(i));
             }
             else
             {
@@ -160,12 +179,7 @@ void StartAirplane()
         i++;
     }
 
-    // Kill server cus player stuck in plane forever.
-    ATslCharacter* server_character = static_cast<ATslCharacter*>(UGameplayStatics::GetPlayerCharacter(World, 0));
-    ATslPlayerController* Controller = server_character->GetTslPlayerController();
-    Controller->Suicide();
-    Controller->ServerSuicide();
-    CUSTOMLOG("Killed server");
+
 
     // Restore the old Match Preparer
     TslGameMode->MatchPreparer = GLOB_OLD_MatchPreparer;

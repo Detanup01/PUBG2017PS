@@ -129,7 +129,8 @@ void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
             Params::GameMode_K2_OnSetMatchState* Parms = static_cast <Params::GameMode_K2_OnSetMatchState*> (Func_Params);
             CUSTOMLOG("K2_OnSetMatchState CALLED WITH NewState: " + Parms->NewState.ToString());
 
-            if (isMatchStarting() == true) 
+            // Fix if not inPorgress it still doing random shit.
+            if (isMatchStarting() == true && Parms->NewState.ToString().find("InProgress") != std::string::npos)
             {
                 // We calling all StartMatch logic here. We check inside the .cpp file respectivly what we using
                 StartRandomMatch();
@@ -177,8 +178,7 @@ DWORD MainThread(HMODULE Module) {
 
     /* Getting the PlayerController, World, OwningGameInstance, ... should all be
      * checked not to be nullptr! */
-    SDK::APlayerController* MyController =
-        UGameplayStatics::GetPlayerController(World, 0);
+    SDK::APlayerController* MyController =UGameplayStatics::GetPlayerController(World, 0);
 
     if (IsTsLGamemode) {
         SetCurrentNetworkStatus("SERVER");
