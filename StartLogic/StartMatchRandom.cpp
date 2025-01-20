@@ -79,7 +79,7 @@ void RandomizePlayerPositionAfterMatchStart(void* Func_Params)
     // make a settings read from experimental settings
     if (!CanLatePlay())
     {
-
+        return;
     }
     auto Params_Input = reinterpret_cast <Params::GameModeBase_K2_PostLogin*> (Func_Params);
     auto NewPawn = Params_Input->NewPlayer->K2_GetPawn();
@@ -97,7 +97,6 @@ void RandomizePlayerPositionAfterMatchStart(void* Func_Params)
     NewTransform.Scale3D = FVector(1.0, 1.0, 1.0);
 
     ATslCharacter* newPlayer = static_cast<ATslCharacter*>(NewPawn);
-    // fix this.
     struct FHitResult HitResultTeleport;
     CreateThread(0, 0, (LPTHREAD_START_ROUTINE)PlayerProtection, newPlayer, 0, 0);
     newPlayer->K2_SetActorTransform(NewTransform, false, &HitResultTeleport, true);

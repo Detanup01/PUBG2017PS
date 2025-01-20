@@ -140,8 +140,9 @@ void StartAirplane()
             // Important function calls (Get players in the plane and move it to the end of the map)
             if (PlayerSeat)
             {
-                FVector TargetLocation = FVector(600000.0, 999999.0, AircraftAltitude);
-                FVector SpawnLocation = FVector(0, 0, AircraftAltitude);
+                // todo check if 0 , 0, 0 and set back to it
+                FVector TargetLocation = GetAirplaneEndPos();
+                FVector SpawnLocation = GetAirplaneStartPos();
 
                 _ARC->VehicleSeatComponent->Ride(TslPawn, PlayerSeat);
                 try

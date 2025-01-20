@@ -153,6 +153,8 @@ void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
                 
         }
 
+        // K2_OnLogout
+
         ProcessEventO(Obj, Func, Func_Params);
         return 0;
     }
