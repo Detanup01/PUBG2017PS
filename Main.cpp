@@ -15,6 +15,7 @@
 #include "Common.h"
 #include "Config/IniSettings.h"
 #include "StartLogic/StartLogic.h"
+#include "SpawnPoints/Spawnpoints.h"
 
 #pragma warning(disable: 4996)
 
@@ -161,6 +162,7 @@ DWORD MainThread(HMODULE Module) {
     /* Code to open a console window */
     AllocConsole();
     LoadIni(Module);
+    InitSpawnpoints();
     FILE* Dummy;
     freopen_s(&Dummy, "CONOUT$", "w", stdout);
     freopen_s(&Dummy, "CONIN$", "r", stdin);

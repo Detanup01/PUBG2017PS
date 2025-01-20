@@ -9,3 +9,11 @@ int GetWaitTime();
 bool IsAirplaneGame();
 
 bool IsRandomSpawn();
+
+FVector GetVectorFromConfig(std::string section, std::string key);
+
+FVector GetAirplaneStartPos();
+
+FVector GetAirplaneEndPos();
+
+std::vector<FVector> GetSpawnpoints();

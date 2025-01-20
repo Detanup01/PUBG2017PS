@@ -11,8 +11,7 @@ void StartRandomMatch()
 
     class ATslGameMode* _MyGamemode = static_cast<ATslGameMode*>(MyGamemode);
 
-    FText TeleportedMessage = UKismetTextLibrary::Conv_StringToText(
-        FString(L"YOU, MY FRIEND, HAVE BEEN TELEPORTED HERE!"));
+    FText TeleportedMessage = UKismetTextLibrary::Conv_StringToText(FString(L"YOU, MY FRIEND, HAVE BEEN TELEPORTED HERE!"));
 
     TArray < class APawn* > AllPawn;
 
@@ -53,6 +52,28 @@ void RandomizePlayerPosition(void* Func_Params)
 }
 
 
+void PlayerProtection(ATslCharacter* player)
+{
+    player->bCanBeDamaged = false;
+    Sleep(60 * 60 * 2);
+    //player->ProcessRevive(100);
+    /*
+    * It prints out message to wait
+    */
+    int time = 4;
+    while (time == 0)
+    {
+        FText Message = UKismetTextLibrary::Conv_StringToText(FString(L"You have a spawn protection!"));
+        player->SendSystemMessage(ESystemMessageType::Important, Message);
+        Sleep(10 * 60); // add more waiting here?
+        time--;
+    }
+    
+    CUSTOMLOG("Player now can be dmg'd");
+    player->bCanBeDamaged = true;
+}
+
+
 void RandomizePlayerPositionAfterMatchStart(void* Func_Params)
 {
     // make a settings read from experimental settings
@@ -61,7 +82,6 @@ void RandomizePlayerPositionAfterMatchStart(void* Func_Params)
         return;*/
     auto Params_Input = reinterpret_cast <Params::GameModeBase_K2_PostLogin*> (Func_Params);
     auto NewPawn = Params_Input->NewPlayer->K2_GetPawn();
-
     FTransform NewTransform;
 
     NewTransform.Translation = GetRandomPoint();
@@ -76,13 +96,8 @@ void RandomizePlayerPositionAfterMatchStart(void* Func_Params)
     NewTransform.Scale3D = FVector(1.0, 1.0, 1.0);
 
     ATslCharacter* newPlayer = static_cast<ATslCharacter*>(NewPawn);
-
     // fix this.
     struct FHitResult HitResultTeleport;
-    CUSTOMLOG("New player joined, making it Invulnerable.");
-    newPlayer->AdminInvulnerable();
-    NewPawn->K2_SetActorTransform(NewTransform, false, &HitResultTeleport, true);
-    Sleep(10000); // todo make this better
-    newPlayer->AdminInvulnerable();
-    CUSTOMLOG("Player should have spawned and fallen, reverting Invulnerable.");
+    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)PlayerProtection, newPlayer, 0, 0);
+    newPlayer->K2_SetActorTransform(NewTransform, false, &HitResultTeleport, true);
 }

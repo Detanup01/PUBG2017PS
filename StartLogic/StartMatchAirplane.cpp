@@ -71,7 +71,6 @@ void StartAirplane()
 
     // Set up aircraft altitude and class
     float Degree = AirbornePrep->EndThetaDegree;
-
     float AircraftAltitude = AirbornePrep->AircraftAltitude;
     TSubclassOf<ATransportAircraftVehicle> AircraftClass = AirbornePrep->AircraftClass;
 
@@ -87,8 +86,7 @@ void StartAirplane()
     AircraftTransform.Scale3D = FVector(1, 1, 1);
     AircraftTransform.Rotation = FQuat(0, 0, 0, 1);
 
-    ATransportAircraftVehicle* _ARC = static_cast<ATransportAircraftVehicle*>(
-        SpawnActorFromClass(World, AircraftClass, AircraftTransform, ESpawnActorCollisionHandlingMethod::AlwaysSpawn, nullptr));
+    ATransportAircraftVehicle* _ARC = static_cast<ATransportAircraftVehicle*>(SpawnActorFromClass(World, AircraftClass, AircraftTransform, ESpawnActorCollisionHandlingMethod::AlwaysSpawn, nullptr));
 
     if (!_ARC)
     {

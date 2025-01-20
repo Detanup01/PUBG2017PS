@@ -51,9 +51,18 @@ FVector RandomVector_FromExisting()
 
 FVector RandomizingVector(FVector vector)
 {
-    vector.X = random(vector.X - min_max_point, vector.X + min_max_point);
-    vector.Y = random(vector.Y - min_max_point, vector.Y + min_max_point);
+    vector.X = (float)random((int)vector.X - min_max_point, (int)vector.X + min_max_point);
+    vector.Y = (float)random((int)vector.Y - min_max_point, (int)vector.Y + min_max_point);
     return vector;
+}
+
+void InitSpawnpoints()
+{
+    auto points = GetSpawnpoints();
+    for (auto point : points)
+    {
+        ExistingSpawnpoints.push_back(point);
+    }
 }
 
 FVector GetRandomPoint()
