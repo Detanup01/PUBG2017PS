@@ -160,6 +160,13 @@ void StartAirplane()
         i++;
     }
 
+    // Kill server cus player stuck in plane forever.
+    ATslCharacter* server_character = static_cast<ATslCharacter*>(UGameplayStatics::GetPlayerCharacter(World, 0));
+    ATslPlayerController* Controller = server_character->GetTslPlayerController();
+    Controller->Suicide();
+    Controller->ServerSuicide();
+    CUSTOMLOG("Killed server");
+
     // Restore the old Match Preparer
     TslGameMode->MatchPreparer = GLOB_OLD_MatchPreparer;
 }
