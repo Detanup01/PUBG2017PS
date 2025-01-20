@@ -170,3 +170,28 @@ void StartAirplane()
     // Restore the old Match Preparer
     TslGameMode->MatchPreparer = GLOB_OLD_MatchPreparer;
 }
+
+void SpawnPlayerOnIsland(void* Func_Params)
+{
+    // make a settings read from experimental settings
+    if (!IsAirplaneGame())
+        return;
+    auto Params_Input = reinterpret_cast <Params::GameModeBase_K2_PostLogin*> (Func_Params);
+    auto NewPawn = Params_Input->NewPlayer->K2_GetPawn();
+
+    FTransform NewTransform;
+
+    NewTransform.Translation = FVector(796360, 19990, 528);
+    FQuat Rotation;
+
+    Rotation.X = 0.0;
+    Rotation.Y = 0.0;
+    Rotation.Z = 0.0;
+    Rotation.W = 1.0;
+
+    NewTransform.Rotation = Rotation;
+    NewTransform.Scale3D = FVector(1.0, 1.0, 1.0);
+
+    struct FHitResult HitResultTeleport;
+    NewPawn->K2_SetActorTransform(NewTransform, false, &HitResultTeleport, true);
+}

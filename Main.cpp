@@ -142,7 +142,13 @@ void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
             if (isMatchStarting())
                 RandomizePlayerPositionAfterMatchStart(Func_Params);
             else
+            {
+                // this will only spawn if airplane
+                SpawnPlayerOnIsland(Func_Params);
+                // this will do when random
                 RandomizePlayerPosition(Func_Params);
+            }
+                
         }
 
         ProcessEventO(Obj, Func, Func_Params);
