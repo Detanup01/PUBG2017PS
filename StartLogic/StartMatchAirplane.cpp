@@ -87,10 +87,6 @@ void StartAirplane()
     AircraftTransform.Scale3D = FVector(1, 1, 1);
     AircraftTransform.Rotation = FQuat(0, 0, 0, 1);
 
-    // we should remove this?
-    ATslAircraftVehicle* Aircraft2 = static_cast<ATslAircraftVehicle*>(
-        SpawnActorFromClass(World, AircraftClass, AircraftTransform, ESpawnActorCollisionHandlingMethod::AlwaysSpawn, nullptr));
-
     ATransportAircraftVehicle* _ARC = static_cast<ATransportAircraftVehicle*>(
         SpawnActorFromClass(World, AircraftClass, AircraftTransform, ESpawnActorCollisionHandlingMethod::AlwaysSpawn, nullptr));
 
