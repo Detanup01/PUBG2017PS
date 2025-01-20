@@ -113,9 +113,16 @@ std::vector<FVector> GetSpawnpoints()
         return vector;
     std::list<CSimpleIniA::Entry> keys{};
     ini.GetAllKeys("AdditionSpawnPoints", keys);
-    for (auto entry : keys)
+    for (auto& entry : keys)
     {
         vector.push_back(GetVectorFromConfig("AdditionSpawnPoints", entry.pItem));
     }
     return vector;
+}
+
+bool CanLatePlay()
+{
+    if (!Loaded)
+        return false;
+    return  ini.GetBoolValue("Experimental", "EnableLatePlayerJoin", false);
 }

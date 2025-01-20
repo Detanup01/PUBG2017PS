@@ -17,3 +17,5 @@ FVector GetAirplaneStartPos();
 FVector GetAirplaneEndPos();
 
 std::vector<FVector> GetSpawnpoints();
+
+bool CanLatePlay();

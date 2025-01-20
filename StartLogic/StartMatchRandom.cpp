@@ -77,9 +77,10 @@ void PlayerProtection(ATslCharacter* player)
 void RandomizePlayerPositionAfterMatchStart(void* Func_Params)
 {
     // make a settings read from experimental settings
-    /*
-    if (!IsRandomSpawn())
-        return;*/
+    if (!CanLatePlay())
+    {
+
+    }
     auto Params_Input = reinterpret_cast <Params::GameModeBase_K2_PostLogin*> (Func_Params);
     auto NewPawn = Params_Input->NewPlayer->K2_GetPawn();
     FTransform NewTransform;
