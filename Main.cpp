@@ -10,10 +10,11 @@
 // WackyHacky is a monkey (But we love him, respect) 
 // Jerry saved our asses many times (Unfuckery dev)
 // Tym helped us deploy the servers and develop the lobby, thank you sm <3
+// Detanup01 by cleaning the big AF file to multiple smallers
 
 #include "Common.h"
 #include "Config/IniSettings.h"
-#include "SpawnPoints/Spawnpoints.h"
+#include "StartLogic/StartLogic.h"
 
 #pragma warning(disable: 4996)
 
@@ -80,18 +81,6 @@ void DisableCullingForAllActors(UWorld* World) // Function half made by ChatGPT 
     }
 }
 
-// It does exactly what its name states
-bool isMatchStarting() {
-    ATslGameState* GameState = static_cast <ATslGameState*> (
-        UGameplayStatics::GetGameState(UWorld::GetWorld()));
-    if (GameState) {
-        if (GameState->RemainingTime <= 0) {
-            return true; // The match is starting (RemainingTime <= 0) so it returns true.
-        }
-    }
-    return false; // If no match is starting or GameState is null, return false.
-}
-
 std::vector<std::string> DontPrintFunctions =
 { 
     "ReceiveTick",
@@ -109,31 +98,6 @@ std::vector<std::string> DontPrintFunctionContains =
     "ServerUpdateCamera",
     "OnParameterUpdated"
 };
-
-void startMatch()
-{
-    return;
-    auto MyGamemode = UGameplayStatics::GetGameMode(UWorld::GetWorld());
-    bool IsTsLGamemode = MyGamemode->IsA(ATslGameMode::StaticClass());
-
-    class ATslGameMode* _MyGamemode = static_cast <ATslGameMode*> (MyGamemode);
-
-    FText TeleportedMessage = UKismetTextLibrary::Conv_StringToText(
-        FString(L"YOU, MY FRIEND, HAVE BEEN TELEPORTED HERE!"));
-
-    TArray < class APawn* > AllPawn;
-
-    _MyGamemode->GetAllPawns(&AllPawn);
-
-    for (class APawn* CurrentPawn : AllPawn) {
-        ATslCharacter* TsL_CurrentPawn = static_cast <ATslCharacter*> (CurrentPawn);
-        TsL_CurrentPawn->bIsVaultingSystemEnabled = true;
-        //TsL_CurrentPawn->K2_TeleportTo();
-
-    }
-}
-
-
 
 void* (*ProcessEventO)(UObject* Obj, UFunction* Func, void* Func_Params);
 void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
@@ -167,33 +131,20 @@ void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
 
             if (isMatchStarting() == true) 
             {
-                startMatch();
+                // We calling all StartMatch logic here. We check inside the .cpp file respectivly what we using
+                StartRandomMatch();
+                StartAirplane();
             }
         }
 
-        // Teleports players to random locations right after they join
         if (FuncName == "K2_OnRestartPlayer")
         {
-            auto Params_Input = reinterpret_cast <Params::GameModeBase_K2_PostLogin*> (Func_Params);
-            auto NewPawn = Params_Input->NewPlayer->K2_GetPawn();
-
-            FTransform NewTransform;
-
-            NewTransform.Translation = GetRandomPoint();
-            FQuat Rotation;
-
-            Rotation.X = 0.0;
-            Rotation.Y = 0.0;
-            Rotation.Z = 0.0;
-            Rotation.W = 1.0;
-
-            NewTransform.Rotation = Rotation;
-            NewTransform.Scale3D = FVector(1.0, 1.0, 1.0);
-
-            struct FHitResult HitResultTeleport;
-
-            NewPawn->K2_SetActorTransform(NewTransform, false, &HitResultTeleport, true);
+            if (isMatchStarting())
+                RandomizePlayerPositionAfterMatchStart(Func_Params);
+            else
+                RandomizePlayerPosition(Func_Params);
         }
+
         ProcessEventO(Obj, Func, Func_Params);
         return 0;
     }
@@ -290,52 +241,6 @@ DWORD MainThread(HMODULE Module) {
             {
                 GameState->RemainingTime = GetWaitTime();
             }
-            /*
-            ATslGameMode* GameMode = static_cast<ATslGameMode*>(MyGamemode);
-
-            CUSTOMLOG("MatchPreparer name: " + std::to_string((int)(GameMode->MatchStartType)));
-            CUSTOMLOG("MatchPreparer name: " + GameMode->MatchPreparer->GetFullName());
-
-            GameMode->MatchStartType = EMatchStartType::Airborne;
-            auto airborneClass = GameMode->MatchPreparerClasses[1].Class;
-            CUSTOMLOG("airborneClass name: " + airborneClass->GetFullName());
-            CUSTOMLOG("classname: " + airborneClass->Class->Name.ToString());
-            CUSTOMLOG("UBlueprintGeneratedClass : " + UBlueprintGeneratedClass::StaticClass()->GetName());
-
-            if (airborneClass->IsA(UBlueprintGeneratedClass::StaticClass()))
-            {
-                CUSTOMLOG("IsA");
-                UObject* obj = airborneClass.Get();
-                CUSTOMLOG("UClass");
-                UBlueprintGeneratedClass* blueprint = static_cast<UBlueprintGeneratedClass*>(obj);
-                CUSTOMLOG("UBlueprintGeneratedClass");
-                UAirborneMatchPreparer* matchborn2 = static_cast<UAirborneMatchPreparer*>(blueprint->DefaultObject);
-                CUSTOMLOG("AircraftAltitude name: " + std::to_string(matchborn2->AircraftAltitude));
-                CUSTOMLOG("EndThetaDegree name: " + std::to_string(matchborn2->EndThetaDegree));
-                GameMode->MatchPreparer = matchborn2;
-                /* This here get the default for our match stuff
-                auto AirborneMatchPreparer2 = UObject::FindObject("AirborneMatchPreparer_Default_C AirborneMatchPreparer_Default.Default__AirborneMatchPreparer_Default_C");
-                CUSTOMLOG("AirborneMatchPreparer2: " + AirborneMatchPreparer2->GetFullName());
-                */
-            /*
-            }
-        */
-
-            
-            //GameMode->MatchPreparer = test;
-
-            /*
-            CUSTOMLOG("MatchPreparer name: " + std::to_string((int)(GameMode->MatchStartType)));
-            CUSTOMLOG("MatchPreparer name: " + GameMode->MatchPreparer->GetFullName());
-            GameMode->bStartPlayerAtMatchStart = true;
-            GameMode->bShouldSpawnAtStartSpot = true;
-            GameMode->bDelayedStart = true;*/
-            /*
-            UAirborneMatchPreparer airborne = {
-                .AircraftAltitude = 150000.0f,
-            };
-            GameMode->MatchPreparer = &airborne;
-            */
         }
 
     }

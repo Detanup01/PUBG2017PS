@@ -5,3 +5,7 @@
 void LoadIni(HMODULE hModule);
 
 int GetWaitTime();
+
+bool IsAirplaneGame();
+
+bool IsRandomSpawn();

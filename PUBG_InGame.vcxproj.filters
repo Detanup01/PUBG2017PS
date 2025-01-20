@@ -57,6 +57,15 @@
     <ClCompile Include="SpawnPoints\Spawnpoints.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StartLogic\StartMatchRandom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StartLogic\StartMatchAirplane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StartLogic\StartDisableNewSpawn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDK\TslGame_classes.hpp">
@@ -107,5 +116,11 @@
     <ClInclude Include="SpawnPoints\Spawnpoints.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StartLogic\StartLogic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="settings.ini" />
   </ItemGroup>
 </Project>

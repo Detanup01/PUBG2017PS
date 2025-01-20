@@ -32,3 +32,25 @@ int GetWaitTime()
     std::string waitTime = std::string(ini.GetValue("Lobby", "WaitTime", "60"));
     return std::stoi(waitTime);
 }
+
+bool IsAirplaneGame()
+{
+    if (!Loaded)
+        return false;
+    bool IsAirplane = ini.GetBoolValue("GameMode", "IsAirPlane", false);
+    bool IsRandomSpawn = ini.GetBoolValue("GameMode", "IsRandomSpawn", false);
+    if (IsAirplane && IsRandomSpawn)
+        return false;
+    return IsAirplane;
+}
+
+bool IsRandomSpawn()
+{
+    if (!Loaded)
+        return false;
+    bool IsAirplane = ini.GetBoolValue("GameMode", "IsAirPlane", false);
+    bool IsRandomSpawn = ini.GetBoolValue("GameMode", "IsRandomSpawn", false);
+    if (IsAirplane && IsRandomSpawn)
+        return true;
+    return IsRandomSpawn;
+}
