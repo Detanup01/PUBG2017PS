@@ -1,30 +1,6 @@
 #include "Logics.h"
 #include "../SpawnPoints/Spawnpoints.h"
 
-void StartRandomMatch()
-{
-    return;
-    // todo figure out this
-
-    auto MyGamemode = UGameplayStatics::GetGameMode(UWorld::GetWorld());
-    bool IsTsLGamemode = MyGamemode->IsA(ATslGameMode::StaticClass());
-
-    class ATslGameMode* _MyGamemode = static_cast<ATslGameMode*>(MyGamemode);
-
-    FText TeleportedMessage = UKismetTextLibrary::Conv_StringToText(FString(L"YOU, MY FRIEND, HAVE BEEN TELEPORTED HERE!"));
-
-    TArray < class APawn* > AllPawn;
-
-    _MyGamemode->GetAllPawns(&AllPawn);
-
-    for (class APawn* CurrentPawn : AllPawn)
-    {
-        ATslCharacter* TsL_CurrentPawn = static_cast <ATslCharacter*> (CurrentPawn);
-        TsL_CurrentPawn->bIsVaultingSystemEnabled = true;
-        //TsL_CurrentPawn->K2_TeleportTo();
-
-    }
-}
 
 void RandomizePlayerPosition(void* Func_Params)
 {
@@ -36,14 +12,7 @@ void RandomizePlayerPosition(void* Func_Params)
     FTransform NewTransform;
 
     NewTransform.Translation = GetRandomPoint();
-    FQuat Rotation;
-
-    Rotation.X = 0.0;
-    Rotation.Y = 0.0;
-    Rotation.Z = 0.0;
-    Rotation.W = 1.0;
-
-    NewTransform.Rotation = Rotation;
+    NewTransform.Rotation = FQuat(0, 0, 0, 1);;
     NewTransform.Scale3D = FVector(1.0, 1.0, 1.0);
 
     struct FHitResult HitResultTeleport;
@@ -86,14 +55,7 @@ void RandomizePlayerPositionAfterMatchStart(void* Func_Params)
     FTransform NewTransform;
 
     NewTransform.Translation = GetRandomPoint();
-    FQuat Rotation;
-
-    Rotation.X = 0.0;
-    Rotation.Y = 0.0;
-    Rotation.Z = 0.0;
-    Rotation.W = 1.0;
-
-    NewTransform.Rotation = Rotation;
+    NewTransform.Rotation = FQuat(0, 0, 0, 1);;
     NewTransform.Scale3D = FVector(1.0, 1.0, 1.0);
 
     ATslCharacter* newPlayer = static_cast<ATslCharacter*>(NewPawn);

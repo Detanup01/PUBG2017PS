@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="Config\IniSettings.cpp" />
     <ClCompile Include="Helpers\Helpers.cpp" />
+    <ClCompile Include="Logics\CustomSettings.cpp" />
     <ClCompile Include="Logics\Fixes.cpp" />
     <ClCompile Include="Logs\Log.cpp" />
     <ClCompile Include="Main.cpp" />

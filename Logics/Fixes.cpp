@@ -11,6 +11,8 @@ void Thread_FixQuitPlayer(ATslPlayerController* controller)
     if (controller)
     {
         CUSTOMLOG("controller->ServerSuicide");
+        // eject from riding? why is it crash here?
+        controller->bCanBeDamaged = true;
         controller->ServerSuicide();
     }
         

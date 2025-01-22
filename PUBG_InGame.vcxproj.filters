@@ -66,6 +66,9 @@
     <ClCompile Include="Logics\Fixes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Logics\CustomSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDK\TslGame_classes.hpp">

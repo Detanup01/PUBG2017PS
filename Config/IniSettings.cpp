@@ -89,7 +89,6 @@ FVector GetVectorFromConfig(std::string section, std::string key)
     int vectorZ = stoi(vectorsplitted[2]);
     
     auto ret = FVector((float)vectorX, (float)vectorY, (float)vectorZ);
-    CUSTOMLOG("FVector " + ret.toString());
     return ret;
 }
 
@@ -121,5 +120,26 @@ bool CanLatePlay()
 {
     if (!Loaded)
         return false;
-    return  ini.GetBoolValue("Experimental", "EnableLatePlayerJoin", false);
+    return ini.GetBoolValue("Experimental", "EnableLatePlayerJoin", false);
+}
+
+bool UseAirplaneRandomStartPoint()
+{
+    if (!Loaded)
+        return false;
+    return ini.GetBoolValue("Airplane", "UseRandomStartPoint", false);
+}
+
+bool UseAirplaneRandomEndPoint()
+{
+    if (!Loaded)
+        return false;
+    return ini.GetBoolValue("Airplane", "UseRandomEndPoint", false);
+}
+
+bool ZoneSettings_EnableDoubleWaiting()
+{
+    if (!Loaded)
+        return false;
+    return ini.GetBoolValue("ZoneSettings", "EnableDoubleWaiting", false);
 }

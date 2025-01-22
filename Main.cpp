@@ -51,30 +51,9 @@ void DisableCullingForAllActors(UWorld* World) // Function half made by ChatGPT 
         {
             std::string LevelName = StreamingLevel->GetName();
 
-            CUSTOMLOG("We are iterating the level: " + LevelName);
-
             // Skip persistent level and ignored levels
-            if (LevelName.find("327") != std::string::npos)
-            {
-                CUSTOMLOG("Skipping level: " + LevelName);
-                continue;
-            }
-
-            if (LevelName.find("328") != std::string::npos)
-            {
-                CUSTOMLOG("Skipping level: " + LevelName);
-                continue;
-            }
-
-            if (LevelName.find("329") != std::string::npos)
-            {
-                CUSTOMLOG("Skipping level: " + LevelName);
-                continue;
-            }
-
             if (LevelName.find("32") != std::string::npos)
             {
-                CUSTOMLOG("Skipping level: " + LevelName);
                 continue;
             }
 
@@ -83,8 +62,6 @@ void DisableCullingForAllActors(UWorld* World) // Function half made by ChatGPT 
             StreamingLevel->bShouldBeVisible = true;
             StreamingLevel->bDisableDistanceStreaming = true;
             StreamingLevel->bShouldBlockOnLoad = true;
-
-            CUSTOMLOG("Forcing load for level: " + LevelName);
         }
     }
 }
@@ -132,7 +109,6 @@ void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
         {
             CUSTOMLOG(ObjName + " CALLED " + FuncName);
         }
-
         if (FuncName == "K2_OnSetMatchState")
         {
             Params::GameMode_K2_OnSetMatchState* Parms = static_cast <Params::GameMode_K2_OnSetMatchState*> (Func_Params);
@@ -142,7 +118,7 @@ void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
             if (isMatchStarting() == true && Parms->NewState.ToString().find("InProgress") != std::string::npos)
             {
                 // We calling all StartMatch logic here. We check inside the .cpp file respectivly what we using
-                StartRandomMatch();
+                AfterMatchStart();
                 StartAirplane();
             }
         }
@@ -258,12 +234,7 @@ DWORD MainThread(HMODULE Module)
         {
             CUSTOMLOG("SERVER DLL INJECTED TO DO STUFF, WE ARE TSLGAMEMODE");
             UKismetSystemLibrary::SetWindowTitle(MakeText(L"PUBG_SERVER_LISTEN"));
-
-            ATslGameState* GameState = static_cast<ATslGameState*>(UGameplayStatics::GetGameState(UWorld::GetWorld()));
-            if (GameState)
-            {
-                GameState->RemainingTime = GetWaitTime();
-            }
+            DoCustomSettings();
         }
 
     }

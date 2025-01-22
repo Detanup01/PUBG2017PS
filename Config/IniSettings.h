@@ -19,3 +19,9 @@ FVector GetAirplaneEndPos();
 std::vector<FVector> GetSpawnpoints();
 
 bool CanLatePlay();
+
+bool UseAirplaneRandomStartPoint();
+
+bool UseAirplaneRandomEndPoint();
+
+bool ZoneSettings_EnableDoubleWaiting();

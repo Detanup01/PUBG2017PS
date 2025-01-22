@@ -1,5 +1,6 @@
 
 #include "Logics.h"
+#include "../SpawnPoints/Spawnpoints.h"
 
 ATransportAircraftVehicle* GLOB_AircraftVehicle = nullptr;
 UMatchPreparer* GLOB_OLD_MatchPreparer = nullptr;
@@ -41,7 +42,6 @@ void StartAirplane()
         CUSTOMLOG("AirborneMatchPreparer class not available.");
         return;
     }
-
     UClass* AirborneMatchPreparerClass = TslGameMode->MatchPreparerClasses[1].Class;
     UObject* PersistentLevel = World->PersistentLevel;
     if (!PersistentLevel)
@@ -53,7 +53,6 @@ void StartAirplane()
     // Save old Match Preparer and set up Airborne Match Preparer
     GLOB_OLD_MatchPreparer = TslGameMode->MatchPreparer;
     TslGameMode->MatchPreparer = static_cast<UMatchPreparer*>(SDK::UGameplayStatics::SpawnObject(AirborneMatchPreparerClass, PersistentLevel));
-
     if (!TslGameMode->MatchPreparer ||
         !TslGameMode->MatchPreparer->IsA(AirborneMatchPreparerClass))
     {
@@ -80,14 +79,39 @@ void StartAirplane()
         return;
     }
 
+
+    // here we make sure we not randomize the plane position every time for new player.
+    // Would be hilarius seeing players just going other direction than the plane.
+
+    int randomNumber = random(1, 8);
+    int rand2 = randomNumber;
+    if (randomNumber > 4)
+    {
+        rand2 -= 4;
+    }
+    CUSTOMLOG("Random location calculation");
+    CUSTOMLOG("Random start location: " + randomNumber);
+    CUSTOMLOG("Random end location: " + rand2);
+    FVector SpawnLocation = UseAirplaneRandomStartPoint() ? FVector((float)randomNumber * 100000, 0, 150000) : GetAirplaneStartPos();
+    FVector TargetLocation = UseAirplaneRandomEndPoint() ? FVector((float)rand2 * 100000, 999999, 150000) : GetAirplaneEndPos();
+
+    // Fail Safe
+    if (TargetLocation == FVector(0, 0, 0))
+    {
+        TargetLocation = FVector(600000, 999999, 150000);
+    }
+    if (SpawnLocation == FVector(0, 0, 0))
+    {
+        SpawnLocation = FVector(0, 0, 150000);
+    }
+
     // Spawn the aircraft
     FTransform AircraftTransform;
-    AircraftTransform.Translation = FVector(0, 0, AircraftAltitude);
+    AircraftTransform.Translation = SpawnLocation;
     AircraftTransform.Scale3D = FVector(1, 1, 1);
     AircraftTransform.Rotation = FQuat(0, 0, 0, 1);
-
+ 
     ATransportAircraftVehicle* _ARC = static_cast<ATransportAircraftVehicle*>(SpawnActorFromClass(World, AircraftClass, AircraftTransform, ESpawnActorCollisionHandlingMethod::AlwaysSpawn, nullptr));
-
     if (!_ARC)
     {
         CUSTOMLOG("Failed to spawn aircraft.");
@@ -96,7 +120,6 @@ void StartAirplane()
 
     // Store the global reference to the aircraft
     GLOB_AircraftVehicle = _ARC;
-
     // Kill server cus player stuck in plane forever.
     ATslCharacter* server_character = static_cast<ATslCharacter*>(UGameplayStatics::GetPlayerCharacter(World, 0));
     ATslPlayerController* Controller = server_character->GetTslPlayerController();
@@ -108,9 +131,9 @@ void StartAirplane()
     TArray<APawn*> AllPawns;
     TslGameMode->GetAllPawns(&AllPawns);
     int i = 0;
+
     for (APawn* Pawn : AllPawns)
     {
-
         if (!Pawn)
         {
             CUSTOMLOG("Pawn not exists.");
@@ -140,19 +163,6 @@ void StartAirplane()
             // Important function calls (Get players in the plane and move it to the end of the map)
             if (PlayerSeat)
             {
-                FVector TargetLocation = GetAirplaneEndPos();
-                FVector SpawnLocation = GetAirplaneStartPos();
-                CUSTOMLOG("TargetLocation" + TargetLocation.toString());
-                CUSTOMLOG("SpawnLocation " + SpawnLocation.toString());
-                if (TargetLocation == FVector(0, 0, 0))
-                {
-                    TargetLocation = FVector(600000, 999999, 150000);
-                }
-                if (SpawnLocation == FVector(0, 0, 0))
-                {
-                    SpawnLocation = FVector(0, 0, 150000);
-                }
-
                 _ARC->VehicleSeatComponent->Ride(TslPawn, PlayerSeat);
                 try
                 {
@@ -173,16 +183,12 @@ void StartAirplane()
                 PlayerSeat->Activate(true);
                 _ARC->InteractionComponent->Activate(true);
                 // _ARC->EjectAll();
-                CUSTOMLOG("Player seated! NetIndex: " + std::to_string(NetIndex) + " i: " + std::to_string(i));
+                CUSTOMLOG("Player seated!");
             }
             else
             {
                 CUSTOMLOG("Player seat is invalid.");
             }
-        }
-        else
-        {
-            CUSTOMLOG("Invalid NetIndex for seating assignment.");
         }
         i++;
     }
@@ -195,7 +201,6 @@ void StartAirplane()
 
 void SpawnPlayerOnIsland(void* Func_Params)
 {
-    // make a settings read from experimental settings
     if (!IsAirplaneGame())
         return;
     auto Params_Input = reinterpret_cast <Params::GameModeBase_K2_PostLogin*> (Func_Params);
@@ -204,14 +209,7 @@ void SpawnPlayerOnIsland(void* Func_Params)
     FTransform NewTransform;
 
     NewTransform.Translation = FVector(796360, 19990, 528);
-    FQuat Rotation;
-
-    Rotation.X = 0.0;
-    Rotation.Y = 0.0;
-    Rotation.Z = 0.0;
-    Rotation.W = 1.0;
-
-    NewTransform.Rotation = Rotation;
+    NewTransform.Rotation = FQuat(0, 0, 0, 1);
     NewTransform.Scale3D = FVector(1.0, 1.0, 1.0);
 
     struct FHitResult HitResultTeleport;
