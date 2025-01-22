@@ -6,9 +6,14 @@ void Thread_FixQuitPlayer(ATslPlayerController* controller)
     // 1 min
     // 60 is 1 minute to a sec
     // 1000 is 1 sec to ms
+    CUSTOMLOG("Waiting poternally a minute");
     Sleep(1 * 60 * 1000);
     if (controller)
+    {
+        CUSTOMLOG("controller->ServerSuicide");
         controller->ServerSuicide();
+    }
+        
 }
 
 void FixQuitPlayers(void* Func_Params)

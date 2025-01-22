@@ -76,24 +76,21 @@ FVector GetVectorFromConfig(std::string section, std::string key)
         return FVector();
 
     std::string vectorValue(ini.GetValue(section.c_str(), key.c_str()));
-    // check if contains
-    auto first = vectorValue.find(", ");
-    if (first != std::string::npos)
-        return FVector();
-    // check if has 2
-    auto last = vectorValue.find_last_of(", ");
-    if (last != std::string::npos)
-        return FVector();
-    if (first == last)
-        return FVector();
 
     auto vectorsplitted = split(vectorValue, ", ");
+    if (vectorsplitted.size() != 3)
+    {
+        CUSTOMLOG("vectorsplitted.size() != 3 | " + vectorsplitted.size());
+        return FVector();
+    }
 
     int vectorX = stoi(vectorsplitted[0]);
     int vectorY = stoi(vectorsplitted[1]);
     int vectorZ = stoi(vectorsplitted[2]);
-
-    return FVector((float)vectorX, (float)vectorY, (float)vectorZ);
+    
+    auto ret = FVector((float)vectorX, (float)vectorY, (float)vectorZ);
+    CUSTOMLOG("FVector " + ret.toString());
+    return ret;
 }
 
 FVector GetAirplaneStartPos()

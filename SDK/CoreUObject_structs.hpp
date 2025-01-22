@@ -411,21 +411,26 @@ public:
 	}
 	FVector operator/(const FVector& Other) const
 	{
-		if (Other.X == 0.0f || Other.Y == 0.0f ||Other.Z == 0.0f)
+		if (Other.X == 0.0f || Other.Y == 0.0f || Other.Z == 0.0f)
 			return *this;
-	
+
 		return { X / Other.X, Y / Other.Y, Z / Other.Z };
 	}
 	FVector operator/(float Scalar) const
 	{
 		if (Scalar == 0.0f)
 			return *this;
-	
+
 		return { X / Scalar, Y / Scalar, Z / Scalar };
 	}
 	bool operator==(const FVector& Other) const
 	{
 		return X == Other.X && Y == Other.Y && Z == Other.Z;
+	}
+
+	std::string toString()
+	{
+		return "X: " + std::to_string(X) + " Y: " + std::to_string(Y) + " Z:" + std::to_string(Z);
 	}
 };
 static_assert(alignof(FVector) == 0x000004, "Wrong alignment on FVector");
