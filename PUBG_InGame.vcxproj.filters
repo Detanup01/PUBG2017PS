@@ -57,13 +57,13 @@
     <ClCompile Include="SpawnPoints\Spawnpoints.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StartLogic\StartMatchRandom.cpp">
+    <ClCompile Include="Logics\StartMatchRandom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StartLogic\StartMatchAirplane.cpp">
+    <ClCompile Include="Logics\StartMatchAirplane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StartLogic\StartDisableNewSpawn.cpp">
+    <ClCompile Include="Logics\Fixes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,7 +116,7 @@
     <ClInclude Include="SpawnPoints\Spawnpoints.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StartLogic\StartLogic.h">
+    <ClInclude Include="Logics\Logics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,3 +15,5 @@ void StartRandomMatch();
 void RandomizePlayerPosition(void* Func_Params);
 
 void RandomizePlayerPositionAfterMatchStart(void* Func_Params);
+
+void FixQuitPlayers(void* Func_Params);

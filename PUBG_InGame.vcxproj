@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="Config\IniSettings.cpp" />
     <ClCompile Include="Helpers\Helpers.cpp" />
+    <ClCompile Include="Logics\Fixes.cpp" />
     <ClCompile Include="Logs\Log.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Network\Network.cpp" />
@@ -156,9 +157,8 @@
     <ClCompile Include="Spawners\ItemSpawner.cpp" />
     <ClCompile Include="Spawners\SpawnEquipments.cpp" />
     <ClCompile Include="SpawnPoints\Spawnpoints.cpp" />
-    <ClCompile Include="StartLogic\StartDisableNewSpawn.cpp" />
-    <ClCompile Include="StartLogic\StartMatchAirplane.cpp" />
-    <ClCompile Include="StartLogic\StartMatchRandom.cpp" />
+    <ClCompile Include="Logics\StartMatchAirplane.cpp" />
+    <ClCompile Include="Logics\StartMatchRandom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
@@ -177,7 +177,7 @@
     <ClInclude Include="Spawners\ItemSpawner.h" />
     <ClInclude Include="Spawners\SpawnEquipments.h" />
     <ClInclude Include="SpawnPoints\Spawnpoints.h" />
-    <ClInclude Include="StartLogic\StartLogic.h" />
+    <ClInclude Include="Logics\Logics.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="settings.ini" />

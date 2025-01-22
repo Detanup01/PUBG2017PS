@@ -14,7 +14,7 @@
 
 #include "Common.h"
 #include "Config/IniSettings.h"
-#include "StartLogic/StartLogic.h"
+#include "Logics/Logics.h"
 #include "SpawnPoints/Spawnpoints.h"
 
 #pragma warning(disable: 4996)
@@ -33,7 +33,8 @@ using namespace SDK;
 
 void DisableCullingForAllActors(UWorld* World) // Function half made by ChatGPT half made by me that saved my ass completely
 {
-    if (!World) {
+    if (!World)
+    {
         CUSTOMLOG("DisableCullingForAllActors: World is null.");
         return;
     }
@@ -44,29 +45,35 @@ void DisableCullingForAllActors(UWorld* World) // Function half made by ChatGPT 
     SDK::TArray < SDK::AActor* >& AllActors = Level->Actors;
 
     // Ignore persistent level, focus on streaming levels
-    for (ULevelStreaming* StreamingLevel : World->StreamingLevels) {
-        if (StreamingLevel) {
+    for (ULevelStreaming* StreamingLevel : World->StreamingLevels)
+    {
+        if (StreamingLevel)
+        {
             std::string LevelName = StreamingLevel->GetName();
 
             CUSTOMLOG("We are iterating the level: " + LevelName);
 
             // Skip persistent level and ignored levels
-            if (LevelName.find("327") != std::string::npos) {
+            if (LevelName.find("327") != std::string::npos)
+            {
                 CUSTOMLOG("Skipping level: " + LevelName);
                 continue;
             }
 
-            if (LevelName.find("328") != std::string::npos) {
+            if (LevelName.find("328") != std::string::npos)
+            {
                 CUSTOMLOG("Skipping level: " + LevelName);
                 continue;
             }
 
-            if (LevelName.find("329") != std::string::npos) {
+            if (LevelName.find("329") != std::string::npos)
+            {
                 CUSTOMLOG("Skipping level: " + LevelName);
                 continue;
             }
 
-            if (LevelName.find("32") != std::string::npos) {
+            if (LevelName.find("32") != std::string::npos)
+            {
                 CUSTOMLOG("Skipping level: " + LevelName);
                 continue;
             }
@@ -103,7 +110,8 @@ std::vector<std::string> DontPrintFunctionContains =
 void* (*ProcessEventO)(UObject* Obj, UFunction* Func, void* Func_Params);
 void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
 {
-    if (Obj && Func) {
+    if (Obj && Func)
+    {
         std::string FuncName;
         std::string ObjName;
 
@@ -152,15 +160,18 @@ void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
             }
                 
         }
-
-        // K2_OnLogout
+        if (FuncName == "K2_OnLogout" && isMatchStarting())
+        {
+            FixQuitPlayers(Func_Params);
+        }
 
         ProcessEventO(Obj, Func, Func_Params);
         return 0;
     }
 }
 
-DWORD MainThread(HMODULE Module) {
+DWORD MainThread(HMODULE Module)
+{
     /* Code to open a console window */
     AllocConsole();
     LoadIni(Module);
@@ -184,10 +195,12 @@ DWORD MainThread(HMODULE Module) {
      * checked not to be nullptr! */
     SDK::APlayerController* MyController =UGameplayStatics::GetPlayerController(World, 0);
 
-    if (IsTsLGamemode) {
+    if (IsTsLGamemode)
+    {
         SetCurrentNetworkStatus("SERVER");
     }
-    else {
+    else
+    {
         SetCurrentNetworkStatus("CLIENT");
     }
 
@@ -196,34 +209,34 @@ DWORD MainThread(HMODULE Module) {
 
     CUSTOMLOG("MINHOOK STATUS INIT: " + StatusString);
 
-    if (InitStatus != MH_OK) {
+    if (InitStatus != MH_OK)
+    {
         CUSTOMLOG("MINHOOK STATUS INIT NOT OK!!!! ABORTING");
         return FALSE;
     }
 
-    uintptr_t ProcessEventAddr =
-        (uintptr_t(GetModuleHandle(0)) + Offsets::ProcessEvent);
+    uintptr_t ProcessEventAddr = (uintptr_t(GetModuleHandle(0)) + Offsets::ProcessEvent);
     // auto ProcessEventAddr = UObject::GObjects->GetByIndex(1)->Vft[0x40];
     ProcessEventO = decltype(ProcessEventO)(ProcessEventAddr);
 
-    auto HookResult = MH_CreateHook((PVOID&)ProcessEventAddr, ProcessEventHook,
-        reinterpret_cast <LPVOID*> (&ProcessEventO));
+    auto HookResult = MH_CreateHook((PVOID&)ProcessEventAddr, ProcessEventHook, reinterpret_cast <LPVOID*> (&ProcessEventO));
     std::string HookResultString = MH_StatusToString(HookResult);
 
-    if (HookResult != MH_STATUS::MH_OK) {
-        CUSTOMLOG("Process Event Hook CREATED FAILED WITH REASON : " +
-            HookResultString + " !");
+    if (HookResult != MH_STATUS::MH_OK)
+    {
+        CUSTOMLOG("Process Event Hook CREATED FAILED WITH REASON : " + HookResultString + " !");
         return FALSE;
     }
 
     CUSTOMLOG("Process Event Hook CREATED GOOD!");
 
-    if (MH_EnableHook((PVOID&)ProcessEventAddr) != MH_STATUS::MH_OK) {
+    if (MH_EnableHook((PVOID&)ProcessEventAddr) != MH_STATUS::MH_OK)
+    {
         CUSTOMLOG("Process Event Hook ENABLE FAILED!");
         return FALSE;
-
     }
-    else {
+    else
+    {
         CUSTOMLOG("Process Event Hook Enabled!");
     }
 
@@ -263,13 +276,14 @@ DWORD MainThread(HMODULE Module) {
     return 0;
 }
 
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved) {
-    switch (reason) {
-    case DLL_PROCESS_ATTACH:
-        CreateThread(0, 0, (LPTHREAD_START_ROUTINE)MainThread, hModule, 0, 0);
-        break;
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved)
+{
+    switch (reason)
+    {
+        case DLL_PROCESS_ATTACH:
+            CreateThread(0, 0, (LPTHREAD_START_ROUTINE)MainThread, hModule, 0, 0);
+            break;
     }
-
     return TRUE;
 }
 
