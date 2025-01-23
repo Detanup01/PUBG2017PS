@@ -25,3 +25,5 @@ bool UseAirplaneRandomStartPoint();
 bool UseAirplaneRandomEndPoint();
 
 bool ZoneSettings_EnableDoubleWaiting();
+
+bool Experimental_EnableFixQuitPlayers();

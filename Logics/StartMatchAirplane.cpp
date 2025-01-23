@@ -87,11 +87,11 @@ void StartAirplane()
     int rand2 = randomNumber;
     if (randomNumber > 4)
     {
-        rand2 -= 4;
+        rand2 = random(1, 4);
     }
     CUSTOMLOG("Random location calculation");
-    CUSTOMLOG("Random start location: " + randomNumber);
-    CUSTOMLOG("Random end location: " + rand2);
+    CUSTOMLOG("Random start location: " + std::to_string(randomNumber));
+    CUSTOMLOG("Random end location: " + std::to_string(rand2));
     FVector SpawnLocation = UseAirplaneRandomStartPoint() ? FVector((float)randomNumber * 100000, 0, 150000) : GetAirplaneStartPos();
     FVector TargetLocation = UseAirplaneRandomEndPoint() ? FVector((float)rand2 * 100000, 999999, 150000) : GetAirplaneEndPos();
 
@@ -104,6 +104,9 @@ void StartAirplane()
     {
         SpawnLocation = FVector(0, 0, 150000);
     }
+
+    CUSTOMLOG("SpawnLocation: " + SpawnLocation.toString());
+    CUSTOMLOG("TargetLocation: " + TargetLocation.toString());
 
     // Spawn the aircraft
     FTransform AircraftTransform;
@@ -172,7 +175,6 @@ void StartAirplane()
                 {
                     CUSTOMLOG("Failed to set rider!");
                 }
-
                 _ARC->SplineComponent->AddSplinePoint(SpawnLocation, ESplineCoordinateSpace::World, true);
                 _ARC->SplineComponent->AddSplinePoint(TargetLocation, ESplineCoordinateSpace::World, true);
                 _ARC->MovementComponent->bUseSafeInterpolation = true;
@@ -214,4 +216,35 @@ void SpawnPlayerOnIsland(void* Func_Params)
 
     struct FHitResult HitResultTeleport;
     NewPawn->K2_SetActorTransform(NewTransform, false, &HitResultTeleport, true);
+}
+
+void JumpFromPlane(ATslCharacter* tsl_char)
+{
+    if (!GLOB_AircraftVehicle)
+    {
+        CUSTOMLOG("GLOB_AircraftVehicle is null!");
+        return;
+    }
+
+    if (!tsl_char)
+    {
+        CUSTOMLOG("tsl_char is null!");
+        return;
+    }
+    UVehicleSeatInteractionComponent* char_seat = nullptr;
+    for (auto& seat : GLOB_AircraftVehicle->VehicleSeatComponent->GetSeats())
+    {
+        if (seat->Rider == tsl_char)
+        {
+            char_seat = seat;
+        }
+    }
+
+    if (!char_seat)
+    {
+        CUSTOMLOG("char_seat is null!");
+        return;
+    }
+    GLOB_AircraftVehicle->VehicleSeatComponent->Leave(tsl_char, char_seat, true);
+    CUSTOMLOG("Character forced out from seat!");
 }

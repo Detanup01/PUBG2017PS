@@ -143,3 +143,10 @@ bool ZoneSettings_EnableDoubleWaiting()
         return false;
     return ini.GetBoolValue("ZoneSettings", "EnableDoubleWaiting", false);
 }
+
+bool Experimental_EnableFixQuitPlayers()
+{
+    if (!Loaded)
+        return false;
+    return ini.GetBoolValue("Experimental", "EnableFixQuitPlayers", false);
+}

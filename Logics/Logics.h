@@ -9,6 +9,8 @@ void StartAirplane();
 
 void SpawnPlayerOnIsland(void* Func_Params);
 
+void JumpFromPlane(ATslCharacter* tsl_char);
+
 // Random
 
 void RandomizePlayerPosition(void* Func_Params);
