@@ -288,7 +288,7 @@ public:
 
 // Predefined struct FName
 // 0x0008 (0x0008 - 0x0000)
-struct FName final
+struct alignas(4) FName final
 {
 public:
 	static inline void*                           AppendString = nullptr;                            // 0x0000(0x0004)(NOT AUTO-GENERATED PROPERTY)
@@ -417,7 +417,7 @@ namespace FTextImpl
 {
 // Predefined struct FTextData
 // 0x0038 (0x0038 - 0x0000)
-class FTextData final
+class alignas(8) FTextData final
 {
 public:
 	uint8                                         Pad_0[0x28];                                       // 0x0000(0x0028)(Fixing Size After Last Property [ Dumper-7 ])

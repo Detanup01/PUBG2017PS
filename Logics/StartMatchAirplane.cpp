@@ -123,12 +123,16 @@ void StartAirplane()
 
     // Store the global reference to the aircraft
     GLOB_AircraftVehicle = _ARC;
-    // Kill server cus player stuck in plane forever.
-    ATslCharacter* server_character = static_cast<ATslCharacter*>(UGameplayStatics::GetPlayerCharacter(World, 0));
-    ATslPlayerController* Controller = server_character->GetTslPlayerController();
-    Controller->Suicide();
-    Controller->ServerSuicide();
-    CUSTOMLOG("Killed server");
+
+    if (Experimental_KillServer())
+    {
+        // Kill server cus player stuck in plane forever.
+        ATslCharacter* server_character = static_cast<ATslCharacter*>(UGameplayStatics::GetPlayerCharacter(World, 0));
+        ATslPlayerController* Controller = server_character->GetTslPlayerController();
+        Controller->Suicide();
+        Controller->ServerSuicide();
+        CUSTOMLOG("Killed server");
+    }
 
     // Get all pawns and assign them to the aircraft
     TArray<APawn*> AllPawns;

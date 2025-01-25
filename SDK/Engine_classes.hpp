@@ -28,7 +28,7 @@ class UActorComponent : public UObject
 public:
 	uint8                                         Pad_28[0x8];                                       // 0x0028(0x0008)(Fixing Size After Last Property [ Dumper-7 ])
 	struct FActorComponentTickFunction            PrimaryComponentTick;                              // 0x0030(0x0058)(Edit, DisableEditOnInstance, NativeAccessSpecifierPublic)
-	TArray<FName>                           ComponentTags;                                     // 0x0088(0x0010)(Edit, BlueprintVisible, ZeroConstructor, NativeAccessSpecifierPublic)
+	TArray<FName>								  ComponentTags;                                     // 0x0088(0x0010)(Edit, BlueprintVisible, ZeroConstructor, NativeAccessSpecifierPublic)
 	TArray<class UAssetUserData*>                 AssetUserData;                                     // 0x0098(0x0010)(ExportObject, ZeroConstructor, ContainsInstancedReference, Protected, NativeAccessSpecifierProtected)
 	uint8                                         BitPad_A8_0 : 3;                                   // 0x00A8(0x0001)(Fixing Bit-Field Size Between Bits [ Dumper-7 ])
 	uint8                                         bReplicates : 1;                                   // 0x00A8(0x0001)(BitIndex: 0x03, PropSize: 0x0001 (Edit, BlueprintVisible, BlueprintReadOnly, Net, DisableEditOnInstance, NoDestructor, Protected, HasGetValueTypeHash, NativeAccessSpecifierProtected))
@@ -192,7 +192,7 @@ static_assert(offsetof(URotatingMovementComponent, PivotTranslation) == 0x00014C
 
 // Class Engine.Actor
 // 0x0378 (0x03A0 - 0x0028)
-class AActor : public UObject
+class alignas(8) AActor : public UObject
 {
 public:
 	uint8                                         Pad_28[0x18];                                      // 0x0028(0x0018)(Fixing Size After Last Property [ Dumper-7 ])
@@ -471,7 +471,7 @@ static_assert(offsetof(AActor, InstanceComponents) == 0x000388, "Member 'AActor:
 
 // Class Engine.AnimCompress
 // 0x0018 (0x0040 - 0x0028)
-class UAnimCompress : public UObject
+class alignas(8) UAnimCompress : public UObject
 {
 public:
 	class FString                                 Description;                                       // 0x0028(0x0010)(Edit, ZeroConstructor, EditConst, HasGetValueTypeHash, NativeAccessSpecifierPublic)
@@ -764,7 +764,7 @@ static_assert(sizeof(UBlueprintFunctionLibrary) == 0x000028, "Wrong size on UBlu
 
 // Class Engine.KismetMathLibrary
 // 0x0000 (0x0028 - 0x0028)
-class UKismetMathLibrary final : public UBlueprintFunctionLibrary
+class alignas(8) UKismetMathLibrary final : public UBlueprintFunctionLibrary
 {
 public:
 	static float Abs(float A);
@@ -1316,7 +1316,7 @@ static_assert(offsetof(USceneComponent, PhysicsVolumeChangedDelegate) == 0x00026
 // Class Engine.PrimitiveComponent
 // 0x03D0 (0x06D0 - 0x0300)
 #pragma pack(push, 0x1)
-class alignas(0x10) UPrimitiveComponent : public USceneComponent
+class UPrimitiveComponent : public USceneComponent
 {
 public:
 	uint8                                         Pad_300[0x8];                                      // 0x0300(0x0008)(Fixing Size After Last Property [ Dumper-7 ])
@@ -1561,7 +1561,7 @@ static_assert(offsetof(UPrimitiveComponent, PostPhysicsComponentTick) == 0x00067
 // Class Engine.ShapeComponent
 // 0x0020 (0x06F0 - 0x06D0)
 #pragma pack(push, 0x1)
-class alignas(0x10) UShapeComponent : public UPrimitiveComponent
+class UShapeComponent : public UPrimitiveComponent
 {
 public:
 	struct FColor                                 ShapeColor;                                        // 0x06C8(0x0004)(Edit, BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData, NoDestructor, AdvancedDisplay, NativeAccessSpecifierPublic)
@@ -1678,7 +1678,7 @@ static_assert(offsetof(UInterpTrackInstProperty, PropertyOuterObjectInst) == 0x0
 
 // Class Engine.Info
 // 0x0000 (0x03A0 - 0x03A0)
-class AInfo : public AActor
+class alignas(8) AInfo : public AActor
 {
 public:
 	static class UClass* StaticClass()
@@ -3451,7 +3451,7 @@ static_assert(offsetof(UAnimationAsset, AssetUserData) == 0x000068, "Member 'UAn
 
 // Class Engine.BlendSpaceBase
 // 0x00C8 (0x0140 - 0x0078)
-class UBlendSpaceBase : public UAnimationAsset
+class alignas(8) UBlendSpaceBase : public UAnimationAsset
 {
 public:
 	uint8                                         Pad_78[0x8];                                       // 0x0078(0x0008)(Fixing Size After Last Property [ Dumper-7 ])
@@ -12191,7 +12191,7 @@ static_assert(offsetof(URendererSettings, WireframeCullThreshold) == 0x0000A4, "
 
 // Class Engine.ThumbnailInfo
 // 0x0000 (0x0028 - 0x0028)
-class UThumbnailInfo final : public UObject
+class alignas(8) UThumbnailInfo final : public UObject
 {
 public:
 	static class UClass* StaticClass()
@@ -12208,7 +12208,7 @@ static_assert(sizeof(UThumbnailInfo) == 0x000028, "Wrong size on UThumbnailInfo"
 
 // Class Engine.SkyLight
 // 0x0010 (0x03B0 - 0x03A0)
-class ASkyLight final : public AInfo
+class alignas(8) ASkyLight final : public AInfo
 {
 public:
 	class USkyLightComponent*                     LightComponent;                                    // 0x03A0(0x0008)(Edit, BlueprintVisible, ExportObject, BlueprintReadOnly, ZeroConstructor, EditConst, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
@@ -12234,7 +12234,7 @@ static_assert(offsetof(ASkyLight, LightComponent) == 0x0003A0, "Member 'ASkyLigh
 
 // Class Engine.InterpTrackInstFade
 // 0x0000 (0x0028 - 0x0028)
-class UInterpTrackInstFade final : public UInterpTrackInst
+class alignas(8) UInterpTrackInstFade final : public UInterpTrackInst
 {
 public:
 	static class UClass* StaticClass()
@@ -12251,7 +12251,7 @@ static_assert(sizeof(UInterpTrackInstFade) == 0x000028, "Wrong size on UInterpTr
 
 // Class Engine.WindDirectionalSource
 // 0x0008 (0x03A8 - 0x03A0)
-class AWindDirectionalSource final : public AInfo
+class alignas(8) AWindDirectionalSource final : public AInfo
 {
 public:
 	class UWindDirectionalSourceComponent*        Component;                                         // 0x03A0(0x0008)(Edit, BlueprintVisible, ExportObject, BlueprintReadOnly, ZeroConstructor, EditConst, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
@@ -12272,7 +12272,7 @@ static_assert(offsetof(AWindDirectionalSource, Component) == 0x0003A0, "Member '
 
 // Class Engine.VoiceChannel
 // 0x0010 (0x0078 - 0x0068)
-class UVoiceChannel final : public UChannel
+class alignas(8) UVoiceChannel final : public UChannel
 {
 public:
 	uint8                                         Pad_68[0x10];                                      // 0x0068(0x0010)(Fixing Struct Size After Last Property [ Dumper-7 ])

@@ -5858,7 +5858,7 @@ static_assert(offsetof(FDebugFloatHistory, bAutoAdjustMinMax) == 0x00001C, "Memb
 
 // ScriptStruct Engine.TimerHandle
 // 0x0008 (0x0008 - 0x0000)
-struct FTimerHandle final
+struct alignas(8) FTimerHandle final
 {
 public:
 	uint64                                        Handle;                                            // 0x0000(0x0008)(ZeroConstructor, Transient, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPrivate)
@@ -5880,7 +5880,7 @@ static_assert(offsetof(FCollisionProfileName, Name) == 0x000000, "Member 'FColli
 
 // ScriptStruct Engine.UserActivity
 // 0x0010 (0x0010 - 0x0000)
-struct FUserActivity final
+struct alignas(8) FUserActivity final
 {
 public:
 	class FString                                 ActionName;                                        // 0x0000(0x0010)(BlueprintVisible, ZeroConstructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
@@ -6577,7 +6577,7 @@ static_assert(offsetof(FMarkerSyncAnimPosition, PositionBetweenMarkers) == 0x000
 
 // ScriptStruct Engine.WalkableSlopeOverride
 // 0x0008 (0x0008 - 0x0000)
-struct FWalkableSlopeOverride final
+struct alignas(4) FWalkableSlopeOverride final
 {
 public:
 	EWalkableSlopeBehavior                        WalkableSlopeBehavior;                             // 0x0000(0x0001)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
@@ -6591,7 +6591,7 @@ static_assert(offsetof(FWalkableSlopeOverride, WalkableSlopeAngle) == 0x000004, 
 
 // ScriptStruct Engine.RepAttachment
 // 0x0040 (0x0040 - 0x0000)
-struct FRepAttachment final
+struct alignas(8) FRepAttachment final
 {
 public:
 	class AActor*                                 AttachParent;                                      // 0x0000(0x0008)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
@@ -7061,7 +7061,7 @@ static_assert(offsetof(FLightmassDebugOptions, ExecutionTimeDivisor) == 0x00000C
 
 // ScriptStruct Engine.LightmassPrimitiveSettings
 // 0x0018 (0x0018 - 0x0000)
-struct FLightmassPrimitiveSettings final
+struct alignas(4) FLightmassPrimitiveSettings final
 {
 public:
 	uint8                                         bUseTwoSidedLighting : 1;                          // 0x0000(0x0001)(BitIndex: 0x00, PropSize: 0x0001 (Edit, BlueprintVisible, BlueprintReadOnly, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic))
@@ -7085,7 +7085,7 @@ static_assert(offsetof(FLightmassPrimitiveSettings, FullyOccludedSamplesFraction
 
 // ScriptStruct Engine.LightmassLightSettings
 // 0x000C (0x000C - 0x0000)
-struct FLightmassLightSettings
+struct alignas(4) FLightmassLightSettings
 {
 public:
 	float                                         IndirectLightingSaturation;                        // 0x0000(0x0004)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
@@ -9197,7 +9197,7 @@ static_assert(offsetof(FCameraCacheEntry, POV) == 0x000010, "Member 'FCameraCach
 
 // ScriptStruct Engine.CollisionResponse
 // 0x0030 (0x0030 - 0x0000)
-struct FCollisionResponse final
+struct alignas(8) FCollisionResponse final
 {
 public:
 	struct FCollisionResponseContainer            ResponseToChannels;                                // 0x0000(0x0020)(Transient, NativeAccessSpecifierPrivate)
@@ -10359,7 +10359,7 @@ static_assert(offsetof(FRootMotionSource_ConstantForce, StrengthOverTime) == 0x0
 
 // ScriptStruct Engine.BasedMovementInfo
 // 0x0030 (0x0030 - 0x0000)
-struct FBasedMovementInfo final
+struct alignas(8) FBasedMovementInfo final
 {
 public:
 	class UPrimitiveComponent*                    MovementBase;                                      // 0x0000(0x0008)(ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)

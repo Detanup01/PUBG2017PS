@@ -27,3 +27,7 @@ bool UseAirplaneRandomEndPoint();
 bool ZoneSettings_EnableDoubleWaiting();
 
 bool Experimental_EnableFixQuitPlayers();
+
+bool Experimental_KillServer();
+
+bool Bots_Enabled();

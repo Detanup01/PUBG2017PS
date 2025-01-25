@@ -150,3 +150,17 @@ bool Experimental_EnableFixQuitPlayers()
         return false;
     return ini.GetBoolValue("Experimental", "EnableFixQuitPlayers", false);
 }
+
+bool Experimental_KillServer()
+{
+    if (!Loaded)
+        return false;
+    return ini.GetBoolValue("Experimental", "KillServer", true);
+}
+
+bool Bots_Enabled()
+{
+    if (!Loaded)
+        return false;
+    return ini.GetBoolValue("Bots", "EnableBot", true);
+}

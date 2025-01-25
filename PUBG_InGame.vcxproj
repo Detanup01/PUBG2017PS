@@ -112,6 +112,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bot\BotSpawn.cpp" />
     <ClCompile Include="Config\IniSettings.cpp" />
     <ClCompile Include="Helpers\Helpers.cpp" />
     <ClCompile Include="Logics\CustomSettings.cpp" />
@@ -162,6 +164,7 @@
     <ClCompile Include="Logics\StartMatchRandom.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bot\Bot.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Config\IniSettings.h" />
     <ClInclude Include="Helpers\Helpers.h" />
