@@ -41,10 +41,8 @@ void AfterMatchStart()
     ATslGameState* GameState = static_cast<ATslGameState*>(UGameplayStatics::GetGameState(world));
     CUSTOMLOG("SafetyZoneRadius: " + std::to_string(GameState->SafetyZoneRadius));
 
-
     if (Bots_Enabled())
     {
         SpawnBot();
-        SpawnBot2();
     }
 }

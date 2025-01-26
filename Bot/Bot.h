@@ -4,5 +4,3 @@
 #include "../Config/IniSettings.h"
 
 void SpawnBot();
-
-void SpawnBot2();

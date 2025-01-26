@@ -111,7 +111,7 @@ void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
         }
         if (FuncName == "K2_OnSetMatchState")
         {
-            Params::GameMode_K2_OnSetMatchState* Parms = static_cast <Params::GameMode_K2_OnSetMatchState*> (Func_Params);
+            Params::GameMode_K2_OnSetMatchState* Parms = static_cast<Params::GameMode_K2_OnSetMatchState*>(Func_Params);
             CUSTOMLOG("K2_OnSetMatchState CALLED WITH NewState: " + Parms->NewState.ToString());
 
             // Fix if not inPorgress it still doing random shit.
@@ -142,6 +142,21 @@ void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
         }
 
         ProcessEventO(Obj, Func, Func_Params);
+
+        if (FuncName == "GetDefaultPawnClassForController")
+        {
+            Params::GameModeBase_GetDefaultPawnClassForController* Params = static_cast<Params::GameModeBase_GetDefaultPawnClassForController*>(Func_Params);
+            CUSTOMLOG("GetDefaultPawnClassForController InController: " + Params->InController->GetFullName());
+            CUSTOMLOG("GetDefaultPawnClassForController ReturnValue: " + Params->ReturnValue->GetFullName());
+        }
+
+        if (FuncName == "SpawnDefaultPawnFor")
+        {
+            Params::GameModeBase_SpawnDefaultPawnFor* Params = static_cast<Params::GameModeBase_SpawnDefaultPawnFor*>(Func_Params);
+            CUSTOMLOG("GameModeBase_SpawnDefaultPawnFor NewPlayer: " + Params->NewPlayer->GetFullName());
+            CUSTOMLOG("GameModeBase_SpawnDefaultPawnFor StartSpot: " + Params->StartSpot->GetFullName());
+            CUSTOMLOG("GameModeBase_SpawnDefaultPawnFor ReturnValue: " + Params->ReturnValue->GetFullName());
+        }
         return 0;
     }
 }
