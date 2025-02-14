@@ -121,6 +121,13 @@ void* ProcessEventHook(UObject* Obj, UFunction* Func, void* Func_Params)
                 AfterMatchStart();
                 StartAirplane();
             }
+
+            // Fix "Crashing" by killing the app. Yes this is a valid fix :D
+            if (Parms->NewState.ToString() == "LeavingMap")
+            {
+                __fastfail(0);
+                TerminateProcess(GetCurrentProcess(), 0);
+            }
         }
 
         if (FuncName == "K2_OnRestartPlayer")
