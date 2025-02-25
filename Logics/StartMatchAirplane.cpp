@@ -13,7 +13,6 @@ void StartAirplane()
     // Access the Engine and World instances
     SDK::UEngine* Engine = SDK::UEngine::GetEngine();
     SDK::UWorld* World = SDK::UWorld::GetWorld();
-
     if (!World || !Engine)
     {
         CUSTOMLOG("World or Engine is invalid.");
@@ -113,7 +112,7 @@ void StartAirplane()
     AircraftTransform.Translation = SpawnLocation;
     AircraftTransform.Scale3D = FVector(1, 1, 1);
     AircraftTransform.Rotation = FQuat(0, 0, 0, 1);
- 
+    
     ATransportAircraftVehicle* _ARC = static_cast<ATransportAircraftVehicle*>(SpawnActorFromClass(World, AircraftClass, AircraftTransform, ESpawnActorCollisionHandlingMethod::AlwaysSpawn, nullptr));
     if (!_ARC)
     {

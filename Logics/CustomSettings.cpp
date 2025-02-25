@@ -10,6 +10,11 @@ void DoCustomSettings()
     {
         GameState->RemainingTime = GetWaitTime();
     }
+    auto mode = UGameplayStatics::GetGameMode(world);
+    if (mode)
+    {
+
+    }
 }
 
 void AfterMatchStart()
@@ -24,6 +29,7 @@ void AfterMatchStart()
     {
         ATslCharacter* TsL_CurrentPawn = static_cast<ATslCharacter*>(CurrentPawn);
         TsL_CurrentPawn->bIsVaultingSystemEnabled = true;
+        TsL_CurrentPawn->ClientCheatFly();
 
     }
     if (ZoneSettings_EnableDoubleWaiting())
@@ -31,15 +37,46 @@ void AfterMatchStart()
         for (auto& blueZone : TslGameMode->BlueZoneCustomOptions)
         {
             CUSTOMLOG("BlueZone index: " + blueZone.PhaseNum);
-            CUSTOMLOG("ReleaseDuration index: " + std::to_string(blueZone.ReleaseDuration));
-            CUSTOMLOG("WarningDuration index: " + std::to_string(blueZone.WarningDuration));
-            CUSTOMLOG("RadiusRate index: " + std::to_string(blueZone.RadiusRate));
+            CUSTOMLOG("ReleaseDuration: " + std::to_string(blueZone.ReleaseDuration));
+            CUSTOMLOG("WarningDuration: " + std::to_string(blueZone.WarningDuration));
+            CUSTOMLOG("RadiusRate: " + std::to_string(blueZone.RadiusRate));
             //blueZone.RadiusRate *= 2;
             //blueZone.ReleaseDuration /= 2;
         }
     }
+    ABattleRoyaleModeController* brm_controller = static_cast<ABattleRoyaleModeController*>(TslGameMode->ModeController);
+    if (brm_controller)
+    {
+        int i = 0;
+        for (auto& gasdata : brm_controller->NormalPoisonGasDataArray)
+        {
+            CUSTOMLOG("normal");
+            CUSTOMLOG("index: " + std::to_string(i));
+            CUSTOMLOG("PoisonGasDamagePerSecond: " + std::to_string(gasdata.PoisonGasDamagePerSecond));
+            CUSTOMLOG("RadiusRate: " + std::to_string(gasdata.RadiusRate));
+            CUSTOMLOG("RandomRadiusRate: " + std::to_string(gasdata.RandomRadiusRate));
+            CUSTOMLOG("ReleaseDuration: " + std::to_string(gasdata.ReleaseDuration));
+            CUSTOMLOG("SpreadRatio: " + std::to_string(gasdata.SpreadRatio));
+            CUSTOMLOG("StartDelay: " + std::to_string(gasdata.StartDelay));
+            CUSTOMLOG("WarningDuration: " + std::to_string(gasdata.WarningDuration));
+            i++;
+        }
+        i = 0;
+        for (auto& gasdata : brm_controller->FastPoisonGasDataArray)
+        {
+            CUSTOMLOG("fast");
+            CUSTOMLOG("index: " + std::to_string(i));
+            CUSTOMLOG("PoisonGasDamagePerSecond: " + std::to_string(gasdata.PoisonGasDamagePerSecond));
+            CUSTOMLOG("RadiusRate: " + std::to_string(gasdata.RadiusRate));
+            CUSTOMLOG("RandomRadiusRate: " + std::to_string(gasdata.RandomRadiusRate));
+            CUSTOMLOG("ReleaseDuration: " + std::to_string(gasdata.ReleaseDuration));
+            CUSTOMLOG("SpreadRatio: " + std::to_string(gasdata.SpreadRatio));
+            CUSTOMLOG("StartDelay: " + std::to_string(gasdata.StartDelay));
+            CUSTOMLOG("WarningDuration: " + std::to_string(gasdata.WarningDuration));
+            i++;
+        }
+    }
     ATslGameState* GameState = static_cast<ATslGameState*>(UGameplayStatics::GetGameState(world));
-    CUSTOMLOG("SafetyZoneRadius: " + std::to_string(GameState->SafetyZoneRadius));
 
     if (Bots_Enabled())
     {
